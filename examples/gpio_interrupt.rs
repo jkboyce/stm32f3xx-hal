@@ -5,13 +5,6 @@
 
 use panic_semihosting as _;
 
-use crate::hal::{
-    gpio::{gpioe::PE13, Output, PushPull},
-    interrupt,
-    prelude::*,
-    stm32,
-};
-use crate::stm32::EXTI;
 use core::cell::RefCell;
 use core::ops::DerefMut;
 use cortex_m::{
@@ -20,8 +13,15 @@ use cortex_m::{
 };
 use cortex_m_rt::entry;
 use stm32f3xx_hal as hal;
+use crate::hal::{
+    gpio::{gpioe::PE13, Output, PushPull},
+    interrupt,
+    prelude::*,
+    stm32,
+};
+use crate::stm32::EXTI;
 
-// Set up global state as Mutexes, for safe concurrent access from interrupt handlers.
+// Set up global state as Mutex, for safe concurrent access from interrupt handler.
 static MUTEX_LED: Mutex<RefCell<Option<PE13<Output<PushPull>>>>> = Mutex::new(RefCell::new(None));
 
 #[entry]
